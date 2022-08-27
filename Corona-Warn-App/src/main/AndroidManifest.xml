@@ -59,7 +59,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:targetApi="n">
+        android:localeConfig="@xml/locales_config"
+        tools:targetApi="33">
 
         <provider
             android:name="androidx.startup.InitializationProvider"
