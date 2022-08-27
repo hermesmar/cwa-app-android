@@ -25,12 +25,12 @@ android {
     println("Current VERSION_PATCH: ${VERSION_PATCH}")
     println("Current VERSION_BUILD: ${VERSION_BUILD}")
 
-    compileSdkVersion 31
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.0"
     defaultConfig {
         applicationId 'de.rki.coronawarnapp'
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 33
 
         ndkVersion "21.2.6472646"
 
