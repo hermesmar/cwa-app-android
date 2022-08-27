@@ -154,7 +154,7 @@ class HomeFragment : Fragment(R.layout.home_fragment_layout), AutoInject {
             menu.findItem(id).apply {
                 title = menuIconWithText(
                     drawable = icon,
-                    title = title
+                    title = title.toString()
                 )
             }
         }
