@@ -117,6 +117,21 @@
                     app:statusText="@{analyticsState.getPrivacyPreservingAnalyticsText(context)}"
                     app:subtitle="@{@string/settings_privacy_preserving_analytics_title}" />
 
+
+                <include
+                    android:id="@+id/settings_app_language"
+                    layout="@layout/include_setting_row"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:body="@{@string/settings_app_language}"
+                    app:color="@{@color/colorSecondary}"
+                    app:icon="@{@drawable/ic_language}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/settings_privacy_preserving_analytics"
+                    app:showDivider="@{true}"
+                    app:subtitle="@{@string/settings_app_language}" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/settings_reset"
                     style="@style/row"
@@ -124,7 +139,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_privacy_preserving_analytics">
+                    app:layout_constraintTop_toBottomOf="@+id/settings_app_language">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
