@@ -56,11 +56,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), AutoInject {
                 .setCancelable(false)
                 .setSingleChoiceItems(
                     languages,
-                    BuildConfig.SUPPORTED_LOCALES.indexOf(getApplicationLocales().toLanguageTags())
+                    BuildConfig.SUPPORTED_LOCALES.indexOf(getApplicationLocales().toLanguageTags().langTag)
                 ) { _, which ->
                     setApplicationLocales(LocaleListCompat.forLanguageTags(BuildConfig.SUPPORTED_LOCALES[which]))
                     binding.settingsAppLanguage.statusText = getApplicationLocales().toLanguageTags().displayName
-                }.show()
+                }
+                .setNegativeButton(R.string.onboarding_button_cancel) { _, _ -> }
+                .show()
         }
 
         binding.settingsAppLanguage.statusText = getApplicationLocales().toLanguageTags().displayName
@@ -110,5 +112,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), AutoInject {
         binding.toolbar.setNavigationOnClickListener { popBackStack() }
     }
 
-    private val String.displayName get() = Locale(this).let { it.getDisplayLanguage(it) }
+    private val String.displayName get() = Locale(langTag).let { it.getDisplayLanguage(it) }
+
+    private val String.langTag get() = split("-").getOrElse(0) { "de" }
 }
