@@ -12,7 +12,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.rki.coronawarnapp.BuildConfig
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.databinding.FragmentSettingsBinding
-import de.rki.coronawarnapp.ui.doNavigate
 import de.rki.coronawarnapp.util.di.AutoInject
 import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.popBackStack
@@ -83,28 +82,28 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), AutoInject {
         val privacyPreservingAnalyticsRow = binding.settingsPrivacyPreservingAnalytics.settingsRow
         val resetRow = binding.settingsReset
         resetRow.setOnClickListener {
-            findNavController().doNavigate(
+            findNavController().navigate(
                 SettingsFragmentDirections.actionSettingsFragmentToSettingsResetFragment()
             )
         }
         tracingRow.setOnClickListener {
-            findNavController().doNavigate(
+            findNavController().navigate(
                 SettingsFragmentDirections.actionSettingsFragmentToSettingsTracingFragment()
             )
         }
         notificationRow.setOnClickListener {
-            findNavController().doNavigate(
+            findNavController().navigate(
                 SettingsFragmentDirections.actionSettingsFragmentToSettingsNotificationFragment()
             )
         }
         backgroundPriorityRow.setOnClickListener {
-            findNavController().doNavigate(
+            findNavController().navigate(
                 SettingsFragmentDirections.actionSettingsFragmentToSettingsBackgroundPriorityFragment()
             )
         }
 
         privacyPreservingAnalyticsRow.setOnClickListener {
-            findNavController().doNavigate(
+            findNavController().navigate(
                 SettingsFragmentDirections.actionSettingsFragmentToSettingsPrivacyPreservingAnalyticsFragment()
             )
         }

@@ -8,6 +8,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.get
 import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,6 @@ import de.rki.coronawarnapp.util.di.AutoInject
 import de.rki.coronawarnapp.util.list.setupSwipe
 import de.rki.coronawarnapp.util.lists.diffutil.update
 import de.rki.coronawarnapp.util.mutateDrawable
-import de.rki.coronawarnapp.util.ui.doNavigate
 import de.rki.coronawarnapp.util.ui.popBackStack
 import de.rki.coronawarnapp.util.ui.viewBinding
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
@@ -105,7 +105,7 @@ class PersonDetailsFragment : Fragment(R.layout.person_details_fragment), AutoIn
 
     private fun onNavEvent(event: PersonDetailsEvents) {
         when (event) {
-            is OpenRecoveryCertificateDetails -> doNavigate(
+            is OpenRecoveryCertificateDetails -> findNavController().navigate(
                 PersonDetailsFragmentDirections
                     .actionPersonDetailsFragmentToRecoveryCertificateDetailsFragment(
                         certIdentifier = event.containerId.qrCodeHash,
@@ -114,7 +114,8 @@ class PersonDetailsFragment : Fragment(R.layout.person_details_fragment), AutoIn
                         colorShade = event.colorShade
                     ).also { viewModel.dismissAdmissionStateBadge() }
             )
-            is OpenTestCertificateDetails -> doNavigate(
+
+            is OpenTestCertificateDetails -> findNavController().navigate(
                 PersonDetailsFragmentDirections
                     .actionPersonDetailsFragmentToTestCertificateDetailsFragment(
                         certIdentifier = event.containerId.qrCodeHash,
@@ -123,7 +124,8 @@ class PersonDetailsFragment : Fragment(R.layout.person_details_fragment), AutoIn
                         colorShade = event.colorShade
                     ).also { viewModel.dismissAdmissionStateBadge() }
             )
-            is OpenVaccinationCertificateDetails -> doNavigate(
+
+            is OpenVaccinationCertificateDetails -> findNavController().navigate(
                 PersonDetailsFragmentDirections
                     .actionPersonDetailsFragmentToVaccinationDetailsFragment(
                         certIdentifier = event.containerId.qrCodeHash,
@@ -132,10 +134,12 @@ class PersonDetailsFragment : Fragment(R.layout.person_details_fragment), AutoIn
                         colorShade = event.colorShade
                     ).also { viewModel.dismissAdmissionStateBadge() }
             )
-            is ValidationStart -> doNavigate(
+
+            is ValidationStart -> findNavController().navigate(
                 PersonDetailsFragmentDirections
                     .actionPersonDetailsFragmentToValidationStartFragment(event.containerId)
             ).also { viewModel.dismissAdmissionStateBadge() }
+
             is ShowErrorDialog -> with(event) {
                 if (error is DccValidationException && error.errorCode == DccValidationException.ErrorCode.NO_NETWORK) {
                     dccValidationNoInternetDialog()
@@ -143,21 +147,27 @@ class PersonDetailsFragment : Fragment(R.layout.person_details_fragment), AutoIn
                     displayDialog(dialog = error.toErrorDialogBuilder(requireContext()))
                 }
             }
-            is OpenBoosterInfoDetails -> doNavigate(
+
+            is OpenBoosterInfoDetails -> findNavController().navigate(
                 PersonDetailsFragmentDirections
                     .actionPersonDetailsFragmentToBoosterInfoDetailsFragment(event.personIdentifierCode)
             ).also { viewModel.dismissAdmissionStateBadge() }
-            is OpenCertificateReissuanceConsent -> doNavigate(
+
+            is OpenCertificateReissuanceConsent -> findNavController().navigate(
                 PersonDetailsFragmentDirections
                     .actionPersonDetailsFragmentToDccReissuanceConsentFragment(event.personIdentifierCode)
             ).also { viewModel.dismissAdmissionStateBadge() }
+
             Back -> {
                 removeGlobalLayoutListener()
                 popBackStack()
             }
+
             OpenCovPassInfo ->
-                doNavigate(PersonDetailsFragmentDirections.actionPersonDetailsFragmentToCovPassInfoFragment())
-                    .also { viewModel.dismissAdmissionStateBadge() }
+                findNavController().navigate(
+                    PersonDetailsFragmentDirections.actionPersonDetailsFragmentToCovPassInfoFragment()
+                ).also { viewModel.dismissAdmissionStateBadge() }
+
             is RecycleCertificate -> onDeleteCertificateDialog(event.cwaCovidCertificate, event.position)
         }
     }
@@ -165,16 +175,14 @@ class PersonDetailsFragment : Fragment(R.layout.person_details_fragment), AutoIn
     private fun onDeleteCertificateDialog(certificate: CwaCovidCertificate, position: Int) =
         displayDialog(
             isDeleteDialog = true,
-            onDismissAction = { position.let { personDetailsAdapter.notifyItemChanged(position) } }
+            onDismissAction = { personDetailsAdapter.notifyItemChanged(position) }
         ) {
             setTitle(R.string.recycle_bin_recycle_certificate_dialog_title)
             setMessage(R.string.recycle_bin_recycle_certificate_dialog_message)
             setPositiveButton(R.string.recycle_bin_recycle_certificate_dialog_positive_button) { _, _ ->
                 viewModel.recycleCertificate(certificate)
             }
-            setNegativeButton(R.string.family_tests_list_deletion_alert_cancel_button) { _, _ ->
-                position.let { personDetailsAdapter.notifyItemChanged(position) }
-            }
+            setNegativeButton(R.string.family_tests_list_deletion_alert_cancel_button) { _, _ -> }
         }
 
     private val globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
