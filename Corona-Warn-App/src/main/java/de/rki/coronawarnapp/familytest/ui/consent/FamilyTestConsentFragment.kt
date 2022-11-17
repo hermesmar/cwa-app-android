@@ -91,9 +91,7 @@ class FamilyTestConsentFragment : Fragment(R.layout.fragment_family_test_consent
                 TestRegistrationStateProcessor.State.Idle,
                 TestRegistrationStateProcessor.State.Working -> Unit
                 is TestRegistrationStateProcessor.State.Error -> {
-                    val dialog = state.getDialogBuilder(requireContext())
-                    dialog.setPositiveButton(android.R.string.ok) { _, _ -> popBackStack() }
-                    dialog.show()
+                    state.showExceptionDialog(this) { popBackStack() }
                 }
                 is TestRegistrationStateProcessor.State.TestRegistered -> findNavController().navigate(
                     NavGraphDirections.actionSubmissionTestResultPendingFragment(
@@ -124,7 +122,7 @@ class FamilyTestConsentFragment : Fragment(R.layout.fragment_family_test_consent
             toolbar.setNavigationOnClickListener {
                 viewModel.onNavigateClose()
             }
-            dataPrivacy.setOnClickListener {
+            dataPrivacyMoreInfo.setOnClickListener {
                 viewModel.onDataPrivacyClick()
             }
             consentButton.setOnClickListener {
