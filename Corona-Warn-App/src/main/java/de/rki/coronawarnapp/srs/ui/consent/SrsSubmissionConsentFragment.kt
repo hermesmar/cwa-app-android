@@ -50,6 +50,12 @@ class SrsSubmissionConsentFragment : Fragment(R.layout.fragment_srs_submission_c
             viewModel.submissionConsentAcceptButtonClicked()
         }
 
+        with(binding) {
+            viewModel.timeBetweenSubmissionsInDays.observe2(this@SrsSubmissionConsentFragment) {
+                srsSectionWarnInterval.text = getString(R.string.srs_section_warn_interval_text, it.toDays())
+            }
+        }
+
         viewModel.showKeysRetrievalProgress.observe2(this) {
             Timber.i("SubmissionTestResult:showKeyRetrievalProgress:$it")
             keyRetrievalProgress.setState(it)
@@ -70,7 +76,7 @@ class SrsSubmissionConsentFragment : Fragment(R.layout.fragment_srs_submission_c
         viewModel.event.observe2(this) {
             when (it) {
                 SrsSubmissionConsentNavigationEvents.NavigateToDataPrivacy ->
-                    findNavController().navigate(R.id.informationPrivacyFragment)
+                    findNavController().navigate(R.id.surveyConsentDetailFragment)
 
                 SrsSubmissionConsentNavigationEvents.NavigateToMainScreen ->
                     findNavController().navigate(
