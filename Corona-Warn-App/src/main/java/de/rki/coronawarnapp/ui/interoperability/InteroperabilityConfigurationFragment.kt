@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.databinding.FragmentInteroperabilityConfigurationBinding
 import de.rki.coronawarnapp.util.di.AutoInject
-import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.popBackStack
 import de.rki.coronawarnapp.util.ui.viewBinding
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
@@ -27,12 +26,12 @@ class InteroperabilityConfigurationFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vm.countryList.observe2(this) {
+        vm.countryList.observe(viewLifecycleOwner) {
             binding.countryData = it
         }
 
         vm.saveInteroperabilityUsed()
-        vm.navigateBack.observe2(this) {
+        vm.navigateBack.observe(viewLifecycleOwner) {
             if (it) {
                 popBackStack()
             }

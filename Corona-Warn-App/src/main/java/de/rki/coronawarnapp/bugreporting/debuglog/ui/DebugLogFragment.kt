@@ -17,7 +17,6 @@ import de.rki.coronawarnapp.ui.dialog.displayDialog
 import de.rki.coronawarnapp.util.ContextExtensions.getDrawableCompat
 import de.rki.coronawarnapp.util.di.AutoInject
 import de.rki.coronawarnapp.util.files.FileSharing
-import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.popBackStack
 import de.rki.coronawarnapp.util.ui.setGone
 import de.rki.coronawarnapp.util.ui.viewBinding
@@ -56,7 +55,7 @@ class DebugLogFragment : Fragment(R.layout.bugreporting_debuglog_fragment), Auto
             debugLogPrivacyInformation.setOnClickListener { vm.onPrivacyButtonPress() }
         }
 
-        vm.state.observe2(this) {
+        vm.state.observe(viewLifecycleOwner) {
             binding.apply {
                 debuglogActivityIndicator.setImageDrawable(
                     requireContext().getDrawableCompat(
@@ -103,7 +102,7 @@ class DebugLogFragment : Fragment(R.layout.bugreporting_debuglog_fragment), Auto
             }
         }
 
-        vm.events.observe2(this) {
+        vm.events.observe(viewLifecycleOwner) {
             when (it) {
                 DebugLogViewModel.Event.ShowLogDeletionRequest -> {
                     showLogDeletionRequest()
@@ -135,7 +134,7 @@ class DebugLogFragment : Fragment(R.layout.bugreporting_debuglog_fragment), Auto
             }
         }
 
-        vm.logUploads.observe2(this@DebugLogFragment) {
+        vm.logUploads.observe(viewLifecycleOwner) {
             val lastLog = it.logs.lastOrNull()?.uploadedAt
 
             binding.debugLogHistoryContainer.setGone(lastLog == null)

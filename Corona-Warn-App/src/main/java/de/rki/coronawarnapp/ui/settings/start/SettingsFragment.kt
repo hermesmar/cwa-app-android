@@ -8,7 +8,6 @@ import androidx.navigation.fragment.findNavController
 import de.rki.coronawarnapp.R
 import de.rki.coronawarnapp.databinding.FragmentSettingsBinding
 import de.rki.coronawarnapp.util.di.AutoInject
-import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.popBackStack
 import de.rki.coronawarnapp.util.ui.viewBinding
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
@@ -28,17 +27,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), AutoInject {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vm.tracingState.observe2(this) {
+        vm.tracingState.observe(viewLifecycleOwner) {
             binding.tracingState = it
         }
-        vm.notificationSettingsState.observe2(this) {
+        vm.notificationSettingsState.observe(viewLifecycleOwner) {
             binding.notificationState = it
         }
-        vm.backgroundPriorityState.observe2(this) {
+        vm.backgroundPriorityState.observe(viewLifecycleOwner) {
             binding.backgroundState = it
         }
 
-        vm.analyticsState.observe2(this) {
+        vm.analyticsState.observe(viewLifecycleOwner) {
             binding.analyticsState = it
         }
 

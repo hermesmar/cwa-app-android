@@ -13,7 +13,6 @@ import de.rki.coronawarnapp.util.ExternalActionHelper.openUrl
 import de.rki.coronawarnapp.util.di.AutoInject
 import de.rki.coronawarnapp.util.lists.diffutil.update
 import de.rki.coronawarnapp.util.mutateDrawable
-import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.popBackStack
 import de.rki.coronawarnapp.util.ui.viewBinding
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
@@ -46,16 +45,16 @@ class TracingDetailsFragment : Fragment(R.layout.tracing_details_fragment_layout
             adapter = detailsAdapter
         }
 
-        vm.detailsItems.observe2(this) {
+        vm.detailsItems.observe(viewLifecycleOwner) {
             detailsAdapter.update(it)
         }
 
-        vm.buttonStates.observe2(this) {
+        vm.buttonStates.observe(viewLifecycleOwner) {
             binding.tracingDetailsState = it
             binding.toolbar.navigationIcon = closeIcon(it)
         }
 
-        vm.routeToScreen.observe2(this) {
+        vm.routeToScreen.observe(viewLifecycleOwner) {
             when (it) {
                 is TracingDetailsNavigationEvents.NavigateToSurveyConsentFragment -> findNavController().navigate(
                     TracingDetailsFragmentDirections.actionRiskDetailsFragmentToSurveyConsentFragment(it.type)

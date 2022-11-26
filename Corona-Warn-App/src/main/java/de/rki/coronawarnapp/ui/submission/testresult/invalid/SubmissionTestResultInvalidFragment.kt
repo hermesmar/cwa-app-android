@@ -13,7 +13,6 @@ import de.rki.coronawarnapp.databinding.FragmentSubmissionTestResultInvalidBindi
 import de.rki.coronawarnapp.familytest.core.model.FamilyCoronaTest
 import de.rki.coronawarnapp.reyclebin.ui.dialog.recycleTestDialog
 import de.rki.coronawarnapp.util.di.AutoInject
-import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.popBackStack
 import de.rki.coronawarnapp.util.ui.viewBinding
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
@@ -44,7 +43,7 @@ class SubmissionTestResultInvalidFragment : Fragment(R.layout.fragment_submissio
             }
             toolbar.setNavigationOnClickListener { goBack() }
         }
-        viewModel.testResult.observe2(this) { uiState ->
+        viewModel.testResult.observe(viewLifecycleOwner) { uiState ->
             when (uiState.coronaTest.type) {
                 BaseCoronaTest.Type.PCR -> {
                     binding.apply {
@@ -83,7 +82,7 @@ class SubmissionTestResultInvalidFragment : Fragment(R.layout.fragment_submissio
             binding.submissionTestResultSection.setTestResultSection(uiState.coronaTest)
         }
 
-        viewModel.routeToScreen.observe2(this) {
+        viewModel.routeToScreen.observe(viewLifecycleOwner) {
             goBack()
         }
     }

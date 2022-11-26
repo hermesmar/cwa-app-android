@@ -13,7 +13,6 @@ import de.rki.coronawarnapp.tracing.ui.tracingConsentDialog
 import de.rki.coronawarnapp.ui.dialog.displayDialog
 import de.rki.coronawarnapp.util.ExternalActionHelper.openDeviceSettings
 import de.rki.coronawarnapp.util.di.AutoInject
-import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.popBackStack
 import de.rki.coronawarnapp.util.ui.viewBinding
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
@@ -36,10 +35,10 @@ class TracingSettingsFragment : Fragment(R.layout.fragment_tracing_settings), Au
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.loggingPeriod.observe2(this) {
+        viewModel.loggingPeriod.observe(viewLifecycleOwner) {
             binding.loggedPeriod = it
         }
-        viewModel.tracingSettingsState.observe2(this) { state ->
+        viewModel.tracingSettingsState.observe(viewLifecycleOwner) { state ->
             binding.settingsTracingState = state
 
             binding.switchRow.apply {
@@ -54,7 +53,7 @@ class TracingSettingsFragment : Fragment(R.layout.fragment_tracing_settings), Au
             }
         }
 
-        viewModel.events.observe2(this) {
+        viewModel.events.observe(viewLifecycleOwner) {
             when (it) {
                 is Event.RequestPermissions -> it.permissionRequest.invoke(requireActivity())
                 is Event.ManualCheckingDialog -> showManualCheckingRequiredDialog()
@@ -65,11 +64,11 @@ class TracingSettingsFragment : Fragment(R.layout.fragment_tracing_settings), Au
             }
         }
 
-        viewModel.isTracingSwitchChecked.observe2(this) { checked ->
+        viewModel.isTracingSwitchChecked.observe(viewLifecycleOwner) { checked ->
             binding.switchRow.setChecked(checked)
         }
 
-        viewModel.ensErrorEvents.observe2(this) { error -> displayDialog { setError(error) } }
+        viewModel.ensErrorEvents.observe(viewLifecycleOwner) { error -> displayDialog { setError(error) } }
 
         setButtonOnClickListener()
     }

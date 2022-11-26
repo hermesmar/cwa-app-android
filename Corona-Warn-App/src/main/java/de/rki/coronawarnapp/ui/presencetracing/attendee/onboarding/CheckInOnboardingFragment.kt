@@ -15,7 +15,6 @@ import de.rki.coronawarnapp.presencetracing.TraceLocationSettings
 import de.rki.coronawarnapp.ui.presencetracing.attendee.confirm.ConfirmCheckInFragment
 import de.rki.coronawarnapp.util.ContextExtensions.getDrawableCompat
 import de.rki.coronawarnapp.util.di.AutoInject
-import de.rki.coronawarnapp.util.ui.observe2
 import de.rki.coronawarnapp.util.ui.popBackStack
 import de.rki.coronawarnapp.util.ui.viewBinding
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
@@ -55,7 +54,7 @@ class CheckInOnboardingFragment : Fragment(R.layout.fragment_trace_location_onbo
             }
         }
 
-        viewModel.isOnboardingComplete.observe2(this) {
+        viewModel.isOnboardingComplete.observe(viewLifecycleOwner) {
             if (it == TraceLocationSettings.OnboardingStatus.ONBOARDED_2_0 && args.uri != null) {
                 findNavController().navigate(
                     CheckInOnboardingFragmentDirections.actionCheckInOnboardingFragmentToCheckInsFragment(
@@ -66,7 +65,7 @@ class CheckInOnboardingFragment : Fragment(R.layout.fragment_trace_location_onbo
             }
         }
 
-        viewModel.events.observe2(this) { navEvent ->
+        viewModel.events.observe(viewLifecycleOwner) { navEvent ->
             when (navEvent) {
                 CheckInOnboardingNavigation.AcknowledgedNavigation -> {
                     val locationId = args.locationId
