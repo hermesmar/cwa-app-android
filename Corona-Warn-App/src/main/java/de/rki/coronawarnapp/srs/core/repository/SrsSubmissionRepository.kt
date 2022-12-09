@@ -30,6 +30,7 @@ import de.rki.coronawarnapp.submission.data.tekhistory.TEKHistoryStorage
 import de.rki.coronawarnapp.submission.task.ExposureKeyHistoryCalculations
 import de.rki.coronawarnapp.tag
 import de.rki.coronawarnapp.util.TimeStamper
+import de.rki.coronawarnapp.util.encoding.base64
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import java.time.Instant
@@ -74,7 +75,7 @@ class SrsSubmissionRepository @Inject constructor(
                 SrsAuthorizationRequest(
                     srsOtp = srsOtp,
                     safetyNetJws = attestResult.report.jwsResult,
-                    salt = String(attestResult.ourSalt),
+                    salt = attestResult.ourSalt.base64(),
                     androidId = androidIdProvider.getAndroidId()
                 )
             )
