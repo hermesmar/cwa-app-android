@@ -33,6 +33,7 @@ import de.rki.coronawarnapp.util.ui.viewBinding
 import de.rki.coronawarnapp.util.viewmodel.CWAViewModelFactoryProvider
 import de.rki.coronawarnapp.util.viewmodel.cwaViewModels
 import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -273,7 +274,13 @@ class HomeFragment : Fragment(R.layout.home_fragment_layout), AutoInject {
                 HomeFragmentDirections.actionMainFragmentToFamilyTestListFragment()
             )
 
-            is HomeFragmentEvents.OpenLinkCardUrl -> openUrl(event.url)
+            is HomeFragmentEvents.OpenLinkCardUrl -> {
+                val urlToOpen = when (val phoneDisplayedLanguage = Locale.getDefault().language) {
+                    DE, TR -> event.url.replace(LANG, phoneDisplayedLanguage)
+                    else -> event.url.replace(LANG, EN)
+                }
+                openUrl(urlToOpen)
+            }
         }
     }
 
@@ -294,5 +301,9 @@ class HomeFragment : Fragment(R.layout.home_fragment_layout), AutoInject {
 
     companion object {
         val TAG = tag<HomeFragment>()
+        private const val EN = "en"
+        private const val DE = "de"
+        private const val TR = "tr"
+        private const val LANG = ":lang"
     }
 }

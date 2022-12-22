@@ -81,9 +81,11 @@ class TraceLocationsFragment : Fragment(R.layout.trace_location_organizer_trace_
                 is TraceLocationEvent.ConfirmDeleteItem -> {
                     showDeleteSingleDialog(it.traceLocation, null)
                 }
+
                 is TraceLocationEvent.ConfirmSwipeItem -> {
                     showDeleteSingleDialog(it.traceLocation, it.position)
                 }
+
                 is TraceLocationEvent.StartQrCodeDetailFragment -> {
                     setupHoldTransition()
                     val navigatorExtras = binding.recyclerView.findViewHolderForAdapterPosition(it.position)?.itemView
@@ -98,10 +100,12 @@ class TraceLocationsFragment : Fragment(R.layout.trace_location_organizer_trace_
                         navigatorExtras
                     )
                 }
+
                 is TraceLocationEvent.DuplicateItem -> {
                     setupAxisTransition()
                     openCreateEventFragment(it.traceLocation)
                 }
+
                 is TraceLocationEvent.StartQrCodePosterFragment -> {
                     setupAxisTransition()
                     findNavController().navigate(
@@ -114,7 +118,7 @@ class TraceLocationsFragment : Fragment(R.layout.trace_location_organizer_trace_
 
                 is TraceLocationEvent.SelfCheckIn -> {
                     findNavController().navigate(
-                        CheckInsFragment.createDeepLink(it.traceLocation.locationUrl, true),
+                        CheckInsFragment.createDeepLink(it.traceLocation.locationUrl, true, it.isOnboarded),
                         NavOptions.Builder()
                             .setPopUpTo(R.id.checkInsFragment, true)
                             .build()
@@ -162,17 +166,12 @@ class TraceLocationsFragment : Fragment(R.layout.trace_location_organizer_trace_
                     )
                     true
                 }
-                R.id.menu_warn_guests -> {
-                    setupAxisTransition()
-                    findNavController().navigate(
-                        R.id.action_traceLocationsFragment_to_traceLocationWarnInfoFragment
-                    )
-                    true
-                }
+
                 R.id.menu_remove_all -> {
                     showDeleteAllDialog()
                     true
                 }
+
                 else -> false
             }
         }
